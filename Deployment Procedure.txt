@@ -1,0 +1,87 @@
+Step 1:
+Create a repository in GitHub. lets call it otree-project. also create email on render.com.
+Commit all your files (meaning upload the project file) i have given u as shown in next step.
+Push your project
+Step 2:
+use any IDE or even command prompt. i have used VSCode
+execute these commands while in the otree_project folder (use cd cammand to get there)
+the fifth cammand below needs to be have url specific to u
+
+git init
+git add .
+git commit -m "Ready for Render deploy"
+git branch -M main
+git remote add origin https://github.com/YOURUSERNAME/otree-project.git
+git push -u origin main
+
+Step 3:
+Go to Render Dashboard .
+Click New → Database → Postgres.
+In Name call it something like otree-db.
+After database creation, copy the Internal Database URL it gives you. we will use this later.
+
+Step 4:
+New → Web Service.
+Connect it to your GitHub repository. select the project u pushed in step 2.
+
+on the left side u will see Environment tab go there and set "Environment Variables" section, add:
+DATABASE_URL → the URL you got from the Postgres you created (remember i said u to copy)
+OTREE_ADMIN_PASSWORD → your chosen admin password (important so only u can create room/sessions and export data, not anyone else)
+OTREE_AUTH_LEVEL → STUDY
+click save and deploy
+
+Step 5:
+go to logs u will see that Render will:
+Install dependencies
+Start your app using the Procfile command (i have already created web: otree prodserver 0.0.0.0:$PORT) it will do automatically
+It will also give you a domain like:
+
+https://yourappname.onrender.com
+
+Step 6:
+Now once u get this domain url, copy it and paste it (overwrite the link) in settings.py that is in otree_project folder where it says ALLOWED_HOSTS = ['yourappname.onrender.com']
+
+step 7:
+deployment will again happen.
+
+Step 8:
+your web application is live now. go to the domain link provided (https://otree-project.onrender.com)
+if will ask for admin login:
+username is admin (u can change it in settings.py)
+password is the one u set for OTREE_ADMIN_PASSWORD in step 4.
+
+Step 9:
+There are two ways u can start the experiment session and room. I think, u should go for rooms. I have already created one u just need to access it.
+Go to rooms from the top bar -> click the already created room called Social Investment Experiment Room.
+
+Step 10:
+Select number of participants. There u can see it says multiple of 3. It is because we have set it that way. However, room gives u a choice to increase the number of participants but in multiples of the constant number u set in program. Nonetheless group number remains fixed (it is set to 3 for now). If u want to change these settings, u need to update __init__.py file. I have created variables in constant for easy access and change.
+
+Step 11:
+Once room is created or even when u havent, u can distribute the url which will make the participants wait if the enter the url. This is another benifit of using rooms. it creates a waiting area before the actual experiment can be started.
+
+https://otree-render-project.onrender.com/room_with_session/social_investment_app
+
+Furthermore there is also hard coded links. u can click show/hide button and u will get urls that u can give to different participants.
+this becomes important if u dont trust ur participants because a single participant can open two browsers to play for two players at the same time.
+
+for example it will look something like this:
+P1 https://otree-project.onrender.com/InitializeParticipant/qjjfduxb
+P2 https://otree-project.onrender.com/InitializeParticipant/9cma2ilt
+
+Step 12:
+After experiment ends u can go to data and click CSV in Custom exports. the downloaded file will have the results that looks like this:
+
+EXPERIMENT SETTINGS (Session: zh7dylml)					
+PLAYERS_PER_GROUP	3				
+NUM_GROUPS	3				
+NUM_ROUNDS	3				
+CORRECT_CHOICE_REWARD	10				
+INCORRECT_CHOICE_PENALTY	0				
+TRANSACTION_COST	0				
+ADVISOR_CORRECTION_THRESHOLD_PERCENT	70				
+					
+ID	participant_code	num_correct	num_incorrect	times_followed_adviser	total_payoff
+P1	7ddy6t8k	0	3	0	0
+P2	drphca01	0	3	0	0
+
